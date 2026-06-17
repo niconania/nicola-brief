@@ -1,0 +1,1136 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Brief — Nicola Nania Web Design</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #0a1628;
+      color: #e0e0e0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    h1, h2, h3 {
+      font-family: 'Playfair Display', serif;
+      font-weight: 700;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 640px;
+      padding: 24px 20px 40px;
+    }
+
+    /* Header */
+    .header {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    .header img {
+      width: 80px;
+      height: auto;
+      margin-bottom: 12px;
+    }
+
+    .header h1 {
+      font-size: 1.5rem;
+      background: linear-gradient(135deg, #c0c0c0, #e8e8e8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .header p {
+      font-size: 0.85rem;
+      color: #8899aa;
+      margin-top: 6px;
+    }
+
+    /* Progress Bar */
+    .progress-bar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 12px;
+      gap: 0;
+    }
+
+    .progress-step {
+      display: flex;
+      align-items: center;
+    }
+
+    .step-circle {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.85rem;
+      font-weight: 600;
+      border: 2px solid #1e3050;
+      background: #111d33;
+      color: #556677;
+      transition: all 0.3s ease;
+      flex-shrink: 0;
+    }
+
+    .step-circle.active,
+    .step-circle.completed {
+      background: linear-gradient(135deg, #c0c0c0, #e8e8e8);
+      border-color: transparent;
+      color: #0a1628;
+    }
+
+    .step-line {
+      width: 40px;
+      height: 2px;
+      background: #1e3050;
+      transition: background 0.3s ease;
+    }
+
+    .step-line.completed {
+      background: linear-gradient(90deg, #c0c0c0, #e8e8e8);
+    }
+
+    .progress-label {
+      text-align: center;
+      font-size: 0.8rem;
+      color: #8899aa;
+      margin-bottom: 28px;
+    }
+
+    /* Card */
+    .form-card {
+      background: #111d33;
+      border: 1px solid #1e3050;
+      border-radius: 16px;
+      padding: 32px 24px;
+    }
+
+    .step {
+      display: none;
+      animation: fadeIn 0.35s ease;
+    }
+
+    .step.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .step h2 {
+      font-size: 1.25rem;
+      margin-bottom: 24px;
+      color: #fff;
+    }
+
+    /* Form Fields */
+    .field {
+      margin-bottom: 20px;
+    }
+
+    .field label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: #c0c8d4;
+      margin-bottom: 6px;
+    }
+
+    .field label .required {
+      color: #c0c0c0;
+      margin-left: 2px;
+    }
+
+    .field input[type="text"],
+    .field input[type="url"],
+    .field input[type="date"],
+    .field textarea,
+    .field select {
+      width: 100%;
+      padding: 12px 14px;
+      background: #0a1628;
+      border: 1px solid #1e3050;
+      border-radius: 10px;
+      color: #e0e0e0;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.9rem;
+      outline: none;
+      transition: border-color 0.2s ease;
+    }
+
+    .field input:focus,
+    .field textarea:focus,
+    .field select:focus {
+      border-color: #c0c0c0;
+    }
+
+    .field input::placeholder,
+    .field textarea::placeholder {
+      color: #445566;
+    }
+
+    .field textarea {
+      min-height: 80px;
+      resize: vertical;
+    }
+
+    .field select {
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='%23889'%3E%3Cpath d='M6 8L0 0h12z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+      cursor: pointer;
+    }
+
+    .field select option {
+      background: #111d33;
+      color: #e0e0e0;
+    }
+
+    .field .error-msg {
+      font-size: 0.78rem;
+      color: #e05555;
+      margin-top: 4px;
+      display: none;
+    }
+
+    .field.has-error input,
+    .field.has-error textarea,
+    .field.has-error select {
+      border-color: #e05555;
+    }
+
+    .field.has-error .error-msg {
+      display: block;
+    }
+
+    /* Radio Groups */
+    .radio-group {
+      display: flex;
+      gap: 12px;
+      margin-top: 4px;
+    }
+
+    .radio-option {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+
+    .radio-option input[type="radio"] {
+      appearance: none;
+      width: 18px;
+      height: 18px;
+      border: 2px solid #1e3050;
+      border-radius: 50%;
+      background: #0a1628;
+      cursor: pointer;
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    .radio-option input[type="radio"]:checked {
+      border-color: #c0c0c0;
+    }
+
+    .radio-option input[type="radio"]:checked::after {
+      content: '';
+      width: 8px;
+      height: 8px;
+      background: linear-gradient(135deg, #c0c0c0, #e8e8e8);
+      border-radius: 50%;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    /* Checkbox Groups */
+    .checkbox-group {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 4px;
+    }
+
+    .checkbox-option {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+
+    .checkbox-option.full-width {
+      grid-column: 1 / -1;
+    }
+
+    .checkbox-option input[type="checkbox"] {
+      appearance: none;
+      width: 18px;
+      height: 18px;
+      border: 2px solid #1e3050;
+      border-radius: 5px;
+      background: #0a1628;
+      cursor: pointer;
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    .checkbox-option input[type="checkbox"]:checked {
+      background: linear-gradient(135deg, #c0c0c0, #e8e8e8);
+      border-color: transparent;
+    }
+
+    .checkbox-option input[type="checkbox"]:checked::after {
+      content: '';
+      width: 5px;
+      height: 9px;
+      border: solid #0a1628;
+      border-width: 0 2px 2px 0;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -55%) rotate(45deg);
+    }
+
+    .otro-input {
+      margin-top: 8px;
+      display: none;
+    }
+
+    .otro-input.visible {
+      display: block;
+    }
+
+    /* Image Upload */
+    .upload-area {
+      border: 2px dashed #1e3050;
+      border-radius: 12px;
+      padding: 24px 16px;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+      margin-top: 4px;
+    }
+
+    .upload-area:hover,
+    .upload-area.dragover {
+      border-color: #c0c0c0;
+      background: rgba(192, 192, 192, 0.04);
+    }
+
+    .upload-area svg {
+      width: 32px;
+      height: 32px;
+      stroke: #556677;
+      fill: none;
+      stroke-width: 1.5;
+      margin-bottom: 8px;
+    }
+
+    .upload-area p {
+      font-size: 0.85rem;
+      color: #667788;
+    }
+
+    .upload-area p span {
+      background: linear-gradient(135deg, #c0c0c0, #e8e8e8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      font-weight: 500;
+    }
+
+    .upload-area small {
+      font-size: 0.75rem;
+      color: #445566;
+      display: block;
+      margin-top: 4px;
+    }
+
+    .upload-area input[type="file"] {
+      display: none;
+    }
+
+    .image-previews {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .image-previews:empty {
+      display: none;
+    }
+
+    .img-thumb {
+      position: relative;
+      aspect-ratio: 1;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid #1e3050;
+    }
+
+    .img-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .img-thumb .remove-img {
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      width: 22px;
+      height: 22px;
+      background: rgba(0, 0, 0, 0.7);
+      border: none;
+      border-radius: 50%;
+      color: #e0e0e0;
+      font-size: 14px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
+      transition: background 0.2s;
+    }
+
+    .img-thumb .remove-img:hover {
+      background: #e05555;
+    }
+
+    /* Note */
+    .note {
+      background: rgba(192, 192, 192, 0.06);
+      border-left: 3px solid #c0c0c0;
+      padding: 10px 14px;
+      font-size: 0.8rem;
+      color: #8899aa;
+      border-radius: 0 8px 8px 0;
+      margin-top: 8px;
+    }
+
+    /* Navigation */
+    .nav-buttons {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 32px;
+    }
+
+    .btn-prev {
+      background: none;
+      border: none;
+      color: #667788;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.9rem;
+      cursor: pointer;
+      padding: 10px 0;
+      transition: color 0.2s;
+    }
+
+    .btn-prev:hover {
+      color: #c0c0c0;
+    }
+
+    .btn-next,
+    .btn-submit {
+      background: linear-gradient(135deg, #c0c0c0, #e8e8e8);
+      border: none;
+      color: #0a1628;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 600;
+      padding: 12px 28px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.1s;
+    }
+
+    .btn-next:hover,
+    .btn-submit:hover {
+      opacity: 0.9;
+    }
+
+    .btn-next:active,
+    .btn-submit:active {
+      transform: scale(0.97);
+    }
+
+    .btn-submit:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .btn-spacer {
+      width: 1px;
+    }
+
+    /* Confirmation */
+    .confirmation {
+      display: none;
+      text-align: center;
+      padding: 60px 20px;
+    }
+
+    .confirmation.active {
+      display: block;
+      animation: fadeIn 0.5s ease;
+    }
+
+    .check-icon {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #c0c0c0, #e8e8e8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 24px;
+      animation: scaleIn 0.5s ease;
+    }
+
+    @keyframes scaleIn {
+      from { transform: scale(0); }
+      50% { transform: scale(1.15); }
+      to { transform: scale(1); }
+    }
+
+    .check-icon svg {
+      width: 32px;
+      height: 32px;
+      stroke: #0a1628;
+      stroke-width: 3;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .check-icon svg path {
+      stroke-dasharray: 40;
+      stroke-dashoffset: 40;
+      animation: drawCheck 0.4s ease 0.3s forwards;
+    }
+
+    @keyframes drawCheck {
+      to { stroke-dashoffset: 0; }
+    }
+
+    .confirmation h2 {
+      font-size: 1.4rem;
+      color: #fff;
+      margin-bottom: 12px;
+    }
+
+    .confirmation p {
+      color: #8899aa;
+      font-size: 0.9rem;
+      line-height: 1.5;
+    }
+
+    /* Spinner */
+    .spinner {
+      display: inline-block;
+      width: 18px;
+      height: 18px;
+      border: 2px solid #0a1628;
+      border-top-color: transparent;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      vertical-align: middle;
+      margin-right: 6px;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Error banner */
+    .submit-error {
+      background: rgba(224, 85, 85, 0.1);
+      border: 1px solid #e05555;
+      border-radius: 10px;
+      padding: 12px 16px;
+      font-size: 0.85rem;
+      color: #e05555;
+      margin-top: 16px;
+      display: none;
+      text-align: center;
+    }
+
+    .submit-error.visible {
+      display: block;
+    }
+
+    /* Responsive */
+    @media (max-width: 480px) {
+      .container {
+        padding: 16px 16px 32px;
+      }
+
+      .form-card {
+        padding: 24px 18px;
+      }
+
+      .step-line {
+        width: 28px;
+      }
+
+      .step-circle {
+        width: 32px;
+        height: 32px;
+        font-size: 0.8rem;
+      }
+
+      .checkbox-group {
+        grid-template-columns: 1fr;
+      }
+
+      .header h1 {
+        font-size: 1.3rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <div class="header">
+      <img src="assets/logo.png" alt="Nicola Nania">
+      <h1>Brief de Proyecto Web</h1>
+      <p>Completa este formulario para recibir tu cotización</p>
+    </div>
+
+    <!-- Progress Bar -->
+    <div class="progress-bar">
+      <div class="progress-step">
+        <div class="step-circle active" data-step="1">1</div>
+      </div>
+      <div class="step-line" data-line="1"></div>
+      <div class="progress-step">
+        <div class="step-circle" data-step="2">2</div>
+      </div>
+      <div class="step-line" data-line="2"></div>
+      <div class="progress-step">
+        <div class="step-circle" data-step="3">3</div>
+      </div>
+      <div class="step-line" data-line="3"></div>
+      <div class="progress-step">
+        <div class="step-circle" data-step="4">4</div>
+      </div>
+    </div>
+    <div class="progress-label">Paso <span id="stepLabel">1</span> de 4 — <span id="stepName">Información General</span></div>
+
+    <!-- Form Card -->
+    <div class="form-card" id="formCard">
+
+      <!-- Step 1: Información General -->
+      <div class="step active" data-step="1">
+        <h2>Información General</h2>
+
+        <div class="field">
+          <label>Nombre de la Empresa <span class="required">*</span></label>
+          <input type="text" name="empresa" required>
+          <div class="error-msg">Este campo es requerido</div>
+        </div>
+
+        <div class="field">
+          <label>Sector / Rubro <span class="required">*</span></label>
+          <input type="text" name="sector" placeholder="Ej: Eléctrico, Petrolero, Construcción" required>
+          <div class="error-msg">Este campo es requerido</div>
+        </div>
+
+        <div class="field">
+          <label>¿Cuentan con logo actual? <span class="required">*</span></label>
+          <div class="radio-group">
+            <label class="radio-option">
+              <input type="radio" name="tienenLogo" value="Sí" required>
+              <span>Sí</span>
+            </label>
+            <label class="radio-option">
+              <input type="radio" name="tienenLogo" value="No">
+              <span>No</span>
+            </label>
+          </div>
+          <div class="error-msg">Selecciona una opción</div>
+        </div>
+
+        <div class="field">
+          <label>¿Tienen definido un nombre de dominio web?</label>
+          <input type="text" name="dominio" placeholder="Ej: www.tuempresa.com">
+        </div>
+      </div>
+
+      <!-- Step 2: Objetivos y Alcance -->
+      <div class="step" data-step="2">
+        <h2>Objetivos y Alcance</h2>
+
+        <div class="field">
+          <label>Objetivo principal de la web <span class="required">*</span></label>
+          <input type="text" name="objetivo" placeholder="Ej: Vender servicios, generar credibilidad, recibir cotizaciones" required>
+          <div class="error-msg">Este campo es requerido</div>
+        </div>
+
+        <div class="field">
+          <label>Secciones requeridas <span class="required">*</span></label>
+          <div class="checkbox-group" id="seccionesGroup">
+            <label class="checkbox-option">
+              <input type="checkbox" name="secciones" value="Inicio">
+              <span>Inicio</span>
+            </label>
+            <label class="checkbox-option">
+              <input type="checkbox" name="secciones" value="Sobre Nosotros">
+              <span>Sobre Nosotros</span>
+            </label>
+            <label class="checkbox-option">
+              <input type="checkbox" name="secciones" value="Servicios">
+              <span>Servicios</span>
+            </label>
+            <label class="checkbox-option">
+              <input type="checkbox" name="secciones" value="Proyectos/Galería">
+              <span>Proyectos/Galería</span>
+            </label>
+            <label class="checkbox-option">
+              <input type="checkbox" name="secciones" value="Alianzas">
+              <span>Alianzas</span>
+            </label>
+            <label class="checkbox-option">
+              <input type="checkbox" name="secciones" value="Contacto">
+              <span>Contacto</span>
+            </label>
+            <label class="checkbox-option full-width">
+              <input type="checkbox" name="secciones" value="Otro" id="seccionOtro">
+              <span>Otro</span>
+            </label>
+          </div>
+          <div class="otro-input" id="seccionOtroInput">
+            <input type="text" name="seccionesOtro" placeholder="Especifica la sección">
+          </div>
+          <div class="error-msg">Selecciona al menos una sección</div>
+        </div>
+
+        <div class="field">
+          <label>Funcionalidades específicas</label>
+          <textarea name="funcionalidades" placeholder="Ej: Formulario de cotización, botón de WhatsApp, mapa interactivo, área privada para clientes"></textarea>
+        </div>
+      </div>
+
+      <!-- Step 3: Identidad Visual y Contenido -->
+      <div class="step" data-step="3">
+        <h2>Identidad Visual y Contenido</h2>
+
+        <div class="field">
+          <label>Colores preferidos</label>
+          <input type="text" name="colores" placeholder="¿Tienen colores corporativos definidos?">
+        </div>
+
+        <div class="field">
+          <label>Estilo visual <span class="required">*</span></label>
+          <select name="estilo" required>
+            <option value="" disabled selected>Selecciona un estilo</option>
+            <option value="Minimalista">Minimalista</option>
+            <option value="Industrial">Industrial</option>
+            <option value="Moderno">Moderno</option>
+            <option value="Serio/Formal">Serio / Formal</option>
+            <option value="Otro">Otro</option>
+          </select>
+          <div class="error-msg">Selecciona un estilo</div>
+        </div>
+
+        <div class="field">
+          <label>¿Cuentan con fotografías propias? <span class="required">*</span></label>
+          <div class="radio-group">
+            <label class="radio-option">
+              <input type="radio" name="fotos" value="Sí" required>
+              <span>Sí</span>
+            </label>
+            <label class="radio-option">
+              <input type="radio" name="fotos" value="No">
+              <span>No</span>
+            </label>
+          </div>
+          <div class="error-msg">Selecciona una opción</div>
+        </div>
+
+        <div class="field">
+          <label>¿Tienen redactado el contenido (textos)? <span class="required">*</span></label>
+          <div class="radio-group">
+            <label class="radio-option">
+              <input type="radio" name="contenido" value="Sí" required>
+              <span>Sí</span>
+            </label>
+            <label class="radio-option">
+              <input type="radio" name="contenido" value="No">
+              <span>No</span>
+            </label>
+          </div>
+          <div class="error-msg">Selecciona una opción</div>
+          <div class="note">Si la respuesta es "No", podemos incluir servicio de redacción o usar textos provisionales.</div>
+        </div>
+      </div>
+
+      <!-- Step 4: Logística y Referencias -->
+      <div class="step" data-step="4">
+        <h2>Logística y Referencias</h2>
+
+        <div class="field">
+          <label>Fecha objetivo de entrega</label>
+          <input type="date" name="fechaEntrega">
+        </div>
+
+        <div class="field">
+          <label>Responsable de aprobaciones <span class="required">*</span></label>
+          <input type="text" name="responsable" placeholder="Nombre y cargo" required>
+          <div class="error-msg">Este campo es requerido</div>
+        </div>
+
+        <div class="field">
+          <label>Web de referencia 1</label>
+          <input type="url" name="referencia1" placeholder="https://ejemplo.com">
+          <div class="error-msg">Ingresa una URL válida</div>
+        </div>
+
+        <div class="field">
+          <label>Web de referencia 2</label>
+          <input type="url" name="referencia2" placeholder="https://ejemplo.com">
+          <div class="error-msg">Ingresa una URL válida</div>
+        </div>
+
+        <div class="field">
+          <label>Lo que más te gusta de esas webs</label>
+          <textarea name="gustaWebs" placeholder="Ej: La limpieza del diseño, cómo muestran los servicios, la rapidez, que se ven muy profesionales"></textarea>
+        </div>
+
+        <div class="field">
+          <label>Referencias de logo</label>
+          <div class="upload-area" id="uploadArea">
+            <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+              <polyline points="17 8 12 3 7 8"/>
+              <line x1="12" y1="3" x2="12" y2="15"/>
+            </svg>
+            <p><span>Sube imágenes</span> o arrastra aquí</p>
+            <small>PNG, JPG o WEBP — máx. 5 imágenes</small>
+            <input type="file" id="fileInput" accept="image/png,image/jpeg,image/webp" multiple>
+          </div>
+          <div class="image-previews" id="imagePreviews"></div>
+          <textarea name="refLogo" placeholder="Describe qué elementos te llaman la atención: formas, tipografía, estilo industrial, etc." style="margin-top: 12px;"></textarea>
+        </div>
+      </div>
+
+      <!-- Navigation -->
+      <div class="nav-buttons">
+        <button type="button" class="btn-prev" id="btnPrev" style="visibility: hidden;">&#8592; Anterior</button>
+        <button type="button" class="btn-next" id="btnNext">Siguiente &#8594;</button>
+        <button type="button" class="btn-submit" id="btnSubmit" style="display: none;">Enviar Brief</button>
+      </div>
+
+      <div class="submit-error" id="submitError">Hubo un error al enviar. Por favor, intenta de nuevo.</div>
+    </div>
+
+    <!-- Confirmation -->
+    <div class="confirmation" id="confirmation">
+      <div class="check-icon">
+        <svg viewBox="0 0 24 24">
+          <path d="M5 13l4 4L19 7"/>
+        </svg>
+      </div>
+      <h2>¡Gracias! Tu brief ha sido enviado.</h2>
+      <p>Nos pondremos en contacto contigo pronto para la cotización.</p>
+    </div>
+  </div>
+
+  <script>
+    // === CONFIG ===
+    const SHEETS_ENDPOINT = 'https://script.google.com/macros/s/AKfycbwwVKTErWzmP8LMoWbNrgpntfTXg9QriQmhbJRAqn7LSJKbgeHw1KvCoIfv7-FPYtKLYw/exec';
+
+    // === STATE ===
+    let currentStep = 1;
+    const totalSteps = 4;
+    const stepNames = ['Información General', 'Objetivos y Alcance', 'Identidad Visual y Contenido', 'Logística y Referencias'];
+
+    // === DOM ===
+    const formCard = document.getElementById('formCard');
+    const confirmation = document.getElementById('confirmation');
+    const btnPrev = document.getElementById('btnPrev');
+    const btnNext = document.getElementById('btnNext');
+    const btnSubmit = document.getElementById('btnSubmit');
+    const stepLabel = document.getElementById('stepLabel');
+    const stepName = document.getElementById('stepName');
+    const submitError = document.getElementById('submitError');
+    const seccionOtro = document.getElementById('seccionOtro');
+    const seccionOtroInput = document.getElementById('seccionOtroInput');
+
+    // === IMAGE UPLOAD ===
+    const uploadArea = document.getElementById('uploadArea');
+    const fileInput = document.getElementById('fileInput');
+    const imagePreviews = document.getElementById('imagePreviews');
+    const MAX_IMAGES = 5;
+    let uploadedImages = [];
+
+    uploadArea.addEventListener('click', () => fileInput.click());
+
+    uploadArea.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      uploadArea.classList.add('dragover');
+    });
+
+    uploadArea.addEventListener('dragleave', () => {
+      uploadArea.classList.remove('dragover');
+    });
+
+    uploadArea.addEventListener('drop', (e) => {
+      e.preventDefault();
+      uploadArea.classList.remove('dragover');
+      handleFiles(e.dataTransfer.files);
+    });
+
+    fileInput.addEventListener('change', () => {
+      handleFiles(fileInput.files);
+      fileInput.value = '';
+    });
+
+    function handleFiles(files) {
+      const remaining = MAX_IMAGES - uploadedImages.length;
+      const toProcess = Array.from(files).slice(0, remaining);
+
+      toProcess.forEach(file => {
+        if (!file.type.match(/^image\/(png|jpeg|webp)$/)) return;
+
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          uploadedImages.push({ name: file.name, data: e.target.result });
+          renderPreviews();
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+
+    function renderPreviews() {
+      imagePreviews.innerHTML = uploadedImages.map((img, i) =>
+        `<div class="img-thumb">
+          <img src="${img.data}" alt="${img.name}">
+          <button type="button" class="remove-img" data-index="${i}">&times;</button>
+        </div>`
+      ).join('');
+
+      imagePreviews.querySelectorAll('.remove-img').forEach(btn => {
+        btn.addEventListener('click', () => {
+          uploadedImages.splice(parseInt(btn.dataset.index), 1);
+          renderPreviews();
+        });
+      });
+    }
+
+    // === "Otro" toggle for secciones ===
+    seccionOtro.addEventListener('change', () => {
+      seccionOtroInput.classList.toggle('visible', seccionOtro.checked);
+    });
+
+    // === NAVIGATION ===
+    btnNext.addEventListener('click', () => {
+      if (!validateStep(currentStep)) return;
+      goToStep(currentStep + 1);
+    });
+
+    btnPrev.addEventListener('click', () => {
+      goToStep(currentStep - 1);
+    });
+
+    btnSubmit.addEventListener('click', submitForm);
+
+    function goToStep(step) {
+      document.querySelector(`.step[data-step="${currentStep}"]`).classList.remove('active');
+      currentStep = step;
+      document.querySelector(`.step[data-step="${currentStep}"]`).classList.add('active');
+      updateProgress();
+      updateButtons();
+    }
+
+    function updateProgress() {
+      stepLabel.textContent = currentStep;
+      stepName.textContent = stepNames[currentStep - 1];
+
+      document.querySelectorAll('.step-circle').forEach(circle => {
+        const s = parseInt(circle.dataset.step);
+        circle.classList.remove('active', 'completed');
+        if (s === currentStep) circle.classList.add('active');
+        else if (s < currentStep) circle.classList.add('completed');
+      });
+
+      document.querySelectorAll('.step-line').forEach(line => {
+        const l = parseInt(line.dataset.line);
+        line.classList.toggle('completed', l < currentStep);
+      });
+    }
+
+    function updateButtons() {
+      btnPrev.style.visibility = currentStep === 1 ? 'hidden' : 'visible';
+      if (currentStep === totalSteps) {
+        btnNext.style.display = 'none';
+        btnSubmit.style.display = 'inline-flex';
+      } else {
+        btnNext.style.display = 'inline-flex';
+        btnSubmit.style.display = 'none';
+      }
+    }
+
+    // === VALIDATION ===
+    function validateStep(step) {
+      const stepEl = document.querySelector(`.step[data-step="${step}"]`);
+      const fields = stepEl.querySelectorAll('.field');
+      let valid = true;
+
+      fields.forEach(field => {
+        field.classList.remove('has-error');
+
+        const input = field.querySelector('input[type="text"], input[type="url"], input[type="date"], textarea, select');
+        const radios = field.querySelectorAll('input[type="radio"]');
+        const checkboxes = field.querySelectorAll('input[type="checkbox"]');
+
+        // Text/select required
+        if (input && input.hasAttribute('required') && !input.value.trim()) {
+          field.classList.add('has-error');
+          valid = false;
+          return;
+        }
+
+        // URL validation
+        if (input && input.type === 'url' && input.value.trim()) {
+          try {
+            new URL(input.value.trim());
+          } catch {
+            field.classList.add('has-error');
+            valid = false;
+            return;
+          }
+        }
+
+        // Radio required
+        if (radios.length > 0 && radios[0].hasAttribute('required')) {
+          const checked = Array.from(radios).some(r => r.checked);
+          if (!checked) {
+            field.classList.add('has-error');
+            valid = false;
+          }
+        }
+
+        // Checkboxes (secciones) — at least one
+        if (checkboxes.length > 0 && field.querySelector('.checkbox-group')) {
+          const checked = Array.from(checkboxes).some(c => c.checked);
+          if (!checked) {
+            field.classList.add('has-error');
+            valid = false;
+          }
+        }
+      });
+
+      return valid;
+    }
+
+    // === COLLECT DATA ===
+    function collectData() {
+      const get = name => {
+        const el = formCard.querySelector(`[name="${name}"]`);
+        if (!el) return '';
+        if (el.type === 'radio' || el.type === 'checkbox') return '';
+        return el.value.trim();
+      };
+
+      const getRadio = name => {
+        const checked = formCard.querySelector(`[name="${name}"]:checked`);
+        return checked ? checked.value : '';
+      };
+
+      const secciones = Array.from(formCard.querySelectorAll('[name="secciones"]:checked'))
+        .map(cb => cb.value === 'Otro' ? formCard.querySelector('[name="seccionesOtro"]').value.trim() || 'Otro' : cb.value);
+
+      return {
+        empresa: get('empresa'),
+        sector: get('sector'),
+        tienenLogo: getRadio('tienenLogo'),
+        dominio: get('dominio'),
+        objetivo: get('objetivo'),
+        secciones: secciones.join(', '),
+        funcionalidades: get('funcionalidades'),
+        colores: get('colores'),
+        estilo: get('estilo'),
+        fotos: getRadio('fotos'),
+        contenido: getRadio('contenido'),
+        fechaEntrega: get('fechaEntrega'),
+        responsable: get('responsable'),
+        referencia1: get('referencia1'),
+        referencia2: get('referencia2'),
+        gustaWebs: get('gustaWebs'),
+        refLogo: get('refLogo'),
+        imagenesLogo: uploadedImages.map(img => img.data),
+      };
+    }
+
+    // === SUBMIT ===
+    async function submitForm() {
+      if (!validateStep(currentStep)) return;
+
+      submitError.classList.remove('visible');
+      btnSubmit.disabled = true;
+      btnSubmit.innerHTML = '<span class="spinner"></span> Enviando...';
+
+      const data = collectData();
+
+      try {
+        const response = await fetch(SHEETS_ENDPOINT, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data),
+        });
+
+        formCard.style.display = 'none';
+        document.querySelector('.progress-bar').style.display = 'none';
+        document.querySelector('.progress-label').style.display = 'none';
+        confirmation.classList.add('active');
+      } catch (err) {
+        submitError.classList.add('visible');
+        btnSubmit.disabled = false;
+        btnSubmit.textContent = 'Enviar Brief';
+      }
+    }
+
+    // Clear errors on input
+    formCard.addEventListener('input', (e) => {
+      const field = e.target.closest('.field');
+      if (field) field.classList.remove('has-error');
+    });
+
+    formCard.addEventListener('change', (e) => {
+      const field = e.target.closest('.field');
+      if (field) field.classList.remove('has-error');
+    });
+  </script>
+</body>
+</html>
