@@ -8,7 +8,7 @@
   },
   "scripts": {
     "studio": "remotion studio src/index.ts",
-    "render": "remotion render src/index.ts MyVideo out/video.mp4",
+    "render": "remotion render src/index.ts PortfolioReel out/portfolio-reel.mp4",
     "preview": "remotion preview src/index.ts"
   },
   "repository": {
